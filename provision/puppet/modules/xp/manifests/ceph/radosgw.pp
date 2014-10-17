@@ -24,13 +24,6 @@ class xp::ceph::radosgw {
       ensure  => present,
       require => File['/etc/apache2/sites-available/rgw.conf'],
       notify  => Service['radosgw'];
-    'rgw-default.conf':
-      ensure  => present,
-      require => File['/etc/apache2/sites-available/rgw-default.conf'],
-      notify  => Service['radosgw'];
-    'default':
-      ensure => absent,
-      require => Package['apache2'];
   }
 
   package {
@@ -74,7 +67,8 @@ class xp::ceph::radosgw {
       group   => root,
       content => template('xp/ceph/radosgw/apache/rgw.conf.erb'),
       require => Package['apache2'];
-    '/etc/apache2/sites-available/rgw-default.conf':
+    # we override the default site (see https://github.com/pmorillon/grid5000-xp-ceph/issues/7)
+    '/etc/apache2/sites-available/default':
       ensure  => file,
       mode    => '0644',
       owner   => root,

@@ -22,7 +22,8 @@ class xp::ceph::radosgw {
   apache_site {
     'rgw.conf':
       ensure  => present,
-      require => File['/etc/apache2/sites-available/rgw.conf'];
+      require => File['/etc/apache2/sites-available/rgw.conf'],
+      notify  => Service['radosgw'];
     'default':
       ensure => absent;
   }

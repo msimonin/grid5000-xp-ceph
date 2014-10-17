@@ -61,7 +61,7 @@
     host = <%= @mds.split('.').first %>
 
 [client.radosgw.<%= @monitor.split('.').first %>]
-    host = <%= @monitor.split('.').first %>
+    host = <%= fqdn %>
     keyring = /etc/ceph/ceph.client.radosgw.keyring
     rgw socket path = /var/run/ceph/ceph.radosgw.<%= @monitor.split('.').first %>.fastcgi.sock
     rgw data = <%= @path %>/radosgw/ceph-radosgw.gateway

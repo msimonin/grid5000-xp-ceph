@@ -24,8 +24,13 @@ class xp::ceph::radosgw {
       ensure  => present,
       require => File['/etc/apache2/sites-available/rgw.conf'],
       notify  => Service['radosgw'];
+    'rgw-default.conf':
+      ensure  => present,
+      require => File['/etc/apache2/sites-available/rgw-default.conf'],
+      notify  => Service['radosgw'];
     'default':
-      ensure => absent;
+      ensure => absent,
+      require => Package['apache2'];
   }
 
   package {
@@ -55,12 +60,26 @@ class xp::ceph::radosgw {
       group   => root,
       content => template('xp/ceph/radosgw/s3gw.fcgi.erb'),
       require => Package['apache2'];
+    '/var/www/s3gw-default.fcgi':
+      ensure  => file,
+      mode    => 755,
+      owner   => root,
+      group   => root,
+      content => template('xp/ceph/radosgw/s3gw.fcgi.erb'),
+      require => Package['apache2'];
     '/etc/apache2/sites-available/rgw.conf':
       ensure  => file,
       mode    => '0644',
       owner   => root,
       group   => root,
       content => template('xp/ceph/radosgw/apache/rgw.conf.erb'),
+      require => Package['apache2'];
+    '/etc/apache2/sites-available/rgw-default.conf':
+      ensure  => file,
+      mode    => '0644',
+      owner   => root,
+      group   => root,
+      content => template('xp/ceph/radosgw/apache/rgw-default.conf.erb'),
       require => Package['apache2'];
     '/etc/apache2/ssl':
       ensure  => directory,
